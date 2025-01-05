@@ -1,0 +1,32 @@
+# Auto-generated and backup files
+*.ide
+*.bak
+*.swp
+*.dmp
+*.obj
+*.log
+*.tmp
+*.ldb
+
+# Build output
+bin/
+obj/
+out/
+
+# Visual Studio specific
+.vs/
+*.user
+*.suo
+*.sln.docstates
+
+# NuGet packages
+*.nupkg
+packages/
+project.lock.json
+
+# ASP.NET Core specific
+/wwwroot/lib/
+appsettings.Development.json
+secrets.json
+
+
