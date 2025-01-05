@@ -26,6 +26,7 @@ project.lock.json
 
 # ASP.NET Core specific
 /wwwroot/lib/
+/EMS.MVC/wwwroot/lib
 appsettings.Development.json
 secrets.json
 
