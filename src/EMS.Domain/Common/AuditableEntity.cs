@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace EMS.Domain.Common
 {
-    public class AuditableEntity
+    public abstract class AuditableEntity : BaseEntity
     {
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
     }
 }

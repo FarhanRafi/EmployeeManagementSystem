@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace EMS.Domain.Common
 {
-    public class BaseGuidEntity
+    public class SoftDelete
     {
+        public bool IsDeleted { get; set; } = false;
     }
 }

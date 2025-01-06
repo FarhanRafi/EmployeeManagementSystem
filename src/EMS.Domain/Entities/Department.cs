@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using EMS.Domain.Common;
 
 namespace EMS.Domain.Entities
 {
-    public class Department
+    public class Department : BaseEntity
     {
+        public required string Name { get; set; }
+        public int? ManagerId { get; set; }
+        public Employee? Manager { get; set; }
+        public decimal Budget { get; set; }
+
+        public ICollection<Employee> Employees { get; set; } = [];
     }
 }
