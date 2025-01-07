@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace EMS.Domain.Common
 {
-    public class SoftDelete
+    public class AuditableEntityWithSoftDeletation : AuditableEntity
     {
         public bool IsDeleted { get; set; } = false;
+        public DateTime? DeletedAt { get; set; }
     }
 }

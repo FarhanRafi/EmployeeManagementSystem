@@ -4,6 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>92aa1d81-d096-4c2b-8fb6-2d52f878905d</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\EMS.Infrastructure\EMS.Infrastructure.csproj" />
+    <ProjectReference Include="..\EMS.Infrastructure\EMS.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

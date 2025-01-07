@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMS.Service", "src\EMS.Serv
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMS.Infrastructure", "src\EMS.Infrastructure\EMS.Infrastructure.csproj", "{EFAEBCFF-A456-43D4-AF1B-A299BC4A0098}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EMS.MVC", "EMS.MVC\EMS.MVC.csproj", "{BE71C393-39C1-46DD-82F0-3EDE024F4833}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMS.MVC", "src\EMS.MVC\EMS.MVC.csproj", "{60A5DEA4-F0FD-4E05-B9A2-AC1E7296CCB9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{EFAEBCFF-A456-43D4-AF1B-A299BC4A0098}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EFAEBCFF-A456-43D4-AF1B-A299BC4A0098}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EFAEBCFF-A456-43D4-AF1B-A299BC4A0098}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BE71C393-39C1-46DD-82F0-3EDE024F4833}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BE71C393-39C1-46DD-82F0-3EDE024F4833}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BE71C393-39C1-46DD-82F0-3EDE024F4833}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BE71C393-39C1-46DD-82F0-3EDE024F4833}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60A5DEA4-F0FD-4E05-B9A2-AC1E7296CCB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60A5DEA4-F0FD-4E05-B9A2-AC1E7296CCB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60A5DEA4-F0FD-4E05-B9A2-AC1E7296CCB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60A5DEA4-F0FD-4E05-B9A2-AC1E7296CCB9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
