@@ -7,9 +7,9 @@
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
 
     <!-- jquery datatable -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.2.0/css/dataTables.dataTables.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://cdn.datatables.net/2.2.0/js/dataTables.js"></script>
 
     <title>Employee Management System</title>
 </head>
@@ -41,10 +41,12 @@
         </nav>
 
         <!-- Placeholder for Dynamic Content -->
-        <div id="dynamic-content"></div>
+        <div id="dynamic-content" class="p-4"></div>
     </main>
     <script src="node_modules/jquery/dist/jquery.min.js"></script>
     <script>
+        const baseUrl = 'https://localhost:7085';
+
         $(document).ready(function () {
             // Load employee content
             $('#employee-link').click(function () {

@@ -1,60 +1,31 @@
 $(function () {
-  var table = $("#employee-table").DataTable({
-    processing: true, // Show processing indicator
-    serverSide: true, // Enable server-side processing
-    ajax: function (data, callback, settings) {
-      const searchTerm = $("#search-name").val();
-      const departmentId = $("#filter-department").val();
-      const position = $("#filter-position").val();
-      const minScore = $("#min-score").val();
-      const maxScore = $("#max-score").val();
+  loadDepartments();
 
-      $.ajax({
-        url: "/api/employees",
-        method: "GET",
-        data: {
-          page: settings.page + 1, // DataTable is 0-indexed, so we increment by 1
-          pageSize: settings.length,
-          searchTerm: searchTerm,
-          departmentId: departmentId,
-          position: position,
-          minScore: minScore,
-          maxScore: maxScore,
-        },
-        success: function (data) {
-          callback({
-            draw: settings.draw,
-            recordsTotal: data.TotalCount,
-            recordsFiltered: data.TotalCount,
-            data: data.Employees,
-          });
-        },
-      });
-    },
-    columns: [
-      { data: "name" },
-      { data: "email" },
-      { data: "phone" },
-      { data: "departmentName" },
-      { data: "position" },
-      { data: "performanceScore" },
-      {
-        data: null,
-        render: function (data, type, row) {
-          return '<button class="btn btn-primary">Edit</button>';
-        },
-      },
-    ],
-    pageLength: 10, // Number of rows per page
-    pagingType: "simple_numbers", // Pagination style
-    dom: "lrtip", // Custom layout for DataTable
-  });
-
-  // Trigger table reload when filters change
-  $("#search-name").on("keyup", function () {
-    table.ajax.reload();
-  });
-  $("#filter-department, #filter-position, #min-score, #max-score").on("change", function () {
-    table.ajax.reload();
+  new DataTable("#employee-table", {
+    paging: true,
+    ordering: true,
+    searching: true,
+    lengthMenu: [10, 25, 50],
+    order: [],
   });
 });
+
+loadDepartments = () => {
+  $.ajax({
+    url: baseUrl + "/api/departments",
+    method: "GET",
+    success: function (data) {
+      debugger;
+      const departments = data.departments;
+      const departmentSelect = $("#filter-department");
+      departments.forEach((department) => {
+        departmentSelect.append($("<option></option>").attr("value", department.id).text(department.name));
+      });
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+      console.error("Error loading departments:", textStatus, errorThrown);
+      $("#filter-department").empty();
+      $("#filter-department").append('<option value="">Failed to load departments</option>');
+    },
+  });
+};
