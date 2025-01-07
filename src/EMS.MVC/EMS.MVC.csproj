@@ -14,8 +14,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\EMS.Infrastructure\EMS.Infrastructure.csproj" />
-  </ItemGroup>
-
 </Project>

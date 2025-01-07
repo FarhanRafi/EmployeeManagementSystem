@@ -1,0 +1,32 @@
+<h3>Employee List</h3>
+
+<input type="text" id="search-name" placeholder="Search by Name">
+<select id="filter-department">
+    <!-- Populate departments dynamically here -->
+</select>
+<select id="filter-position">
+    <option value="">Select Position</option>
+    <option value="Manager">Manager</option>
+    <option value="Developer">Developer</option>
+    <!-- Add other positions as needed -->
+</select>
+<input type="number" id="min-score" placeholder="Min Performance Score">
+<input type="number" id="max-score" placeholder="Max Performance Score">
+
+
+<table id="employee-table" class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Department</th>
+            <th>Position</th>
+            <th>Performance Score</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Employee rows will be inserted dynamically here -->
+    </tbody>
+</table>

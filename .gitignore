@@ -31,4 +31,5 @@ project.lock.json
 appsettings.Development.json
 secrets.json
 
-
+#front end packages
+node_modules/
