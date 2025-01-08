@@ -58,7 +58,7 @@ namespace EMS.Infrastructure.Data
 
             foreach (var entry in entries)
             {
-                if (entry.Entity is AuditableEntityWithSoftDeletation softDelete)
+                if (entry.Entity is AuditableEntityWithSoftDeletation softDelete && entry.State == EntityState.Deleted)
                 {
                     softDelete.IsDeleted = true;
                     softDelete.DeletedAt = DateTime.UtcNow;
@@ -88,7 +88,7 @@ namespace EMS.Infrastructure.Data
 
             foreach (var entry in entries)
             {
-                if (entry.Entity is AuditableEntityWithSoftDeletation softDelete)
+                if (entry.Entity is AuditableEntityWithSoftDeletation softDelete && entry.State == EntityState.Deleted)
                 {
                     softDelete.IsDeleted = true;
                     softDelete.DeletedAt = DateTime.UtcNow;
