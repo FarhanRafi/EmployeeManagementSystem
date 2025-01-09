@@ -1,21 +1,36 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h3>Employee List</h3>
-    <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">Add
+    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#employeeModal"
+        onclick="openAddEmployeeModal()">Add
         Employee</button>
 </div>
 
 
-<div class="mb-4">
-    <input type="text" id="nameFilter" placeholder="Search by Name">
-    <input type="text" id="positionFilter" placeholder="Search by Position">
-    <select id="departmentFilter">
-        <option value="">Select Department</option>
-    </select>
-    <input type="number" id="minScoreFilter" placeholder="Min Score">
-    <input type="number" id="maxScoreFilter" placeholder="Max Score">
-    <button class="btn btn-sm btn-outline-primary" id="filterButton">Filter</button>
+<div class="mb-4 p-3 border rounded" style="background-color: #f9f9f9;">
+    <p class="form-label fw-bold">Search and Filter:</p>
+    <div class="row g-3 align-items-center">
+        <div class="col-md-2">
+            <input type="text" id="nameFilter" class="form-control" placeholder="Search by Name">
+        </div>
+        <div class="col-md-2">
+            <input type="text" id="positionFilter" class="form-control" placeholder="Search by Position">
+        </div>
+        <div class="col-md-3">
+            <select id="departmentFilter" class="form-select">
+                <option value="">Select Department</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <input type="number" id="minScoreFilter" class="form-control" placeholder="Min Score" min="0">
+        </div>
+        <div class="col-md-2">
+            <input type="number" id="maxScoreFilter" class="form-control" placeholder="Max Score" min="0">
+        </div>
+        <div class="col-md-1">
+            <button class="btn btn-primary w-100" id="filterButton">Filter</button>
+        </div>
+    </div>
 </div>
-
 
 <table id="employee-table" class="table table-dark table-striped">
     <thead>
@@ -35,16 +50,17 @@
     </tbody>
 </table>
 
-<!-- Add Employee Modal -->
-<div class="modal fade" id="addEmployeeModal" tabindex="-1" aria-labelledby="addEmployeeModalLabel" aria-hidden="true">
+<!-- Add/Edit Employee Modal -->
+<div class="modal fade" id="employeeModal" tabindex="-1" aria-labelledby="employeeModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addEmployeeModalLabel">Add Employee</h5>
+                <h5 class="modal-title" id="employeeModalLabel">Add/Edit Employee</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id="employeeForm">
+                    <input type="hidden" id="employeeId" name="employeeId"> <!-- Hidden input for employee ID -->
                     <div class="mb-3">
                         <label for="name" class="form-label">Name</label>
                         <input type="text" class="form-control" id="name" name="name" required>
@@ -74,10 +90,10 @@
                         </select>
                     </div>
                     <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox" id="isActive" name="isActive" checked>
+                        <input class="form-check-input" type="checkbox" id="isActive" name="isActive">
                         <label class="form-check-label" for="isActive">Active</label>
                     </div>
-                    <button type="submit" class="btn btn-primary">Add Employee</button>
+                    <button type="submit" class="btn btn-primary" id="submitButton">Save Employee</button>
                 </form>
             </div>
         </div>

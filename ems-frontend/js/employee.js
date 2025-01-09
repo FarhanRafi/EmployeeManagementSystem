@@ -1,9 +1,7 @@
 $(function () {
   loadDepartments("departmentFilter");
 
-  initEmployeeModal();
-
-  const dataTable = new DataTable("#employee-table", {
+  var dataTable = new DataTable("#employee-table", {
     processing: true, // Show a loader while processing
     serverSide: true, // Enable server-side processing
     // paging: true, // Use DataTable's pagination
@@ -31,9 +29,21 @@ $(function () {
         // Map backend response to DataTables format
         return json.data;
       },
-      error: function (xhr) {
-        alert("Error loading employees");
-        console.error(xhr.responseText);
+      error: function (xhr, status, error) {
+        const response = xhr.responseJSON;
+        const statusCode = xhr.status;
+
+        if (statusCode === 400) {
+          alert("Bad request: " + response.Error);
+        } else if (statusCode === 404) {
+          alert("Resource not found: " + response.Error);
+        } else if (statusCode === 500) {
+          alert("Internal Server Error: " + response.Error);
+        } else {
+          alert("An unexpected error occurred. Please try again later.");
+        }
+
+        console.error(`Error ${statusCode}: ${response.Error}`);
       },
     },
     columns: [
@@ -66,15 +76,23 @@ $(function () {
   });
 });
 
-function loadDepartments(id) {
+// load departments and pre-select the current department
+function loadDepartments(htmlId, selectedDepartmentId) {
   $.ajax({
     url: baseUrl + "/api/departments",
     method: "GET",
     success: function (res) {
       const departments = res.data;
-      const departmentSelect = $(`#${id}`);
+      const departmentSelect = $(`#${htmlId}`);
+      departmentSelect.empty();
+      departmentSelect.append('<option value="">Select Department</option>');
+
       departments.forEach((department) => {
-        departmentSelect.append($("<option></option>").attr("value", department.id).text(department.name));
+        if (selectedDepartmentId == department.id) {
+          departmentSelect.append($("<option></option>").attr("value", department.id).text(department.name).attr("selected", "selected"));
+        } else {
+          departmentSelect.append($("<option></option>").attr("value", department.id).text(department.name));
+        }
       });
     },
     error: function (jqXHR, textStatus, errorThrown) {
@@ -86,53 +104,103 @@ function loadDepartments(id) {
   });
 }
 
-function initEmployeeModal() {
-  loadDepartments("departmentId");
+var isEditMode = false; // Flag to determine if we are in edit mode
 
-  // Attach form submission handler
-  $("#employeeForm").on("submit", function (e) {
-    e.preventDefault();
-    handleEmployeeFormSubmit();
+// Function to open the modal in Add mode (clear form, change button text)
+function openAddEmployeeModal() {
+  isEditMode = false; // Set to Add mode
+  loadDepartments("departmentId");
+  $("#employeeForm")[0].reset(); // Reset the form
+
+  $("#employeeModalLabel").text("Add Employee");
+  $("#submitButton").text("Create");
+
+  $("#employeeId").val(""); // Clear the hidden employee ID
+  $("#employeeModal").modal("show");
+}
+
+// Function to open the modal in Edit mode (populate form, change button text)
+function editEmployee(id) {
+  isEditMode = true; // Set to Edit mode
+
+  $.ajax({
+    url: baseUrl + "/api/employees/" + id,
+    method: "GET",
+    success: function (res) {
+      const employee = res.employee;
+
+      $("#employeeId").val(res.id);
+      $("#name").val(employee.name);
+      $("#email").val(employee.email);
+      $("#phone").val(employee.phone);
+      $("#position").val(employee.position);
+
+      const formattedDate = employee.joiningDate.split("T")[0];
+      $("#joiningDate").val(formattedDate);
+      $("#isActive").prop("checked", employee.isActive);
+
+      $("#employeeModalLabel").text("Edit Employee");
+      $("#submitButton").text("Update");
+
+      loadDepartments("departmentId", employee.departmentId);
+
+      $("#employeeModal").modal("show");
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      const response = xhr.responseJSON || {};
+      const errorMessage = response.error || "An unexpected error occurred.";
+      alert("Error loading employee: " + errorMessage);
+    },
   });
 }
 
+$("#employeeForm").on("submit", function (e) {
+  e.preventDefault();
+  handleEmployeeFormSubmit();
+});
+
+// Handle the form submission (both Add and Edit)
 function handleEmployeeFormSubmit() {
-  const formData = {
+  const employeeData = {
+    id: Number($("#employeeId").val()) || 0,
     name: $("#name").val(),
     email: $("#email").val(),
     phone: $("#phone").val(),
     position: $("#position").val(),
-    joiningDate: new Date($("#joiningDate").val()).toISOString(), // Convert to UTC
-    departmentId: parseInt($("#departmentId").val(), 10),
-    isActive: $("#isActive").is(":checked"),
+    joiningDate: $("#joiningDate").val(),
+    departmentId: Number($("#departmentId").val()) || 0,
+    isActive: $("#isActive").prop("checked"),
   };
 
-  $.ajax({
-    url: baseUrl + "/api/employees",
-    type: "POST",
-    contentType: "application/json",
-    data: JSON.stringify(formData),
-    success: function (res) {
-      alert(`Employee added successfully!\nEmployee Name: ${res.name}\nEmployee Email: ${res.email}`);
-      location.reload();
-    },
-    error: function (xhr) {
-      alert("Failed to add employee");
-      console.log("Failed to add employee: " + xhr.responseText);
-    },
-  });
-}
-
-function loadEmployees() {
-  $.ajax({
-    url: baseUrl + "/api/employees",
-    method: "GET",
-    success: function (res) {
-      // console.log(res);
-    },
-    error: function (jqXHR, textStatus, errorThrown) {
-      console.error("Error loading employess:", textStatus, errorThrown);
-      alert("Error loading employees");
-    },
-  });
+  if (isEditMode) {
+    $.ajax({
+      url: baseUrl + "/api/employees/" + employeeData.id,
+      method: "PUT",
+      data: JSON.stringify(employeeData),
+      contentType: "application/json",
+      success: function (res) {
+        alert("Employee updated successfully!");
+        $("#employeeModal").modal("hide");
+      },
+      error: function (xhr, textStatus, errorThrown) {
+        debugger;
+        alert("Error updating employee: " + errorThrown);
+      },
+    });
+  } else {
+    $.ajax({
+      url: baseUrl + "/api/employees",
+      method: "POST",
+      data: JSON.stringify(employeeData),
+      contentType: "application/json",
+      success: function (res) {
+        alert("Employee added successfully!");
+        $("#employeeModal").modal("hide");
+      },
+      error: function (xhr, textStatus, errorThrown) {
+        alert("Error adding employee: " + errorThrown);
+      },
+    });
+  }
+  dataTable.ajax.reload();
 }
