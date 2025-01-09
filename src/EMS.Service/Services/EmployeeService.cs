@@ -134,7 +134,6 @@ namespace EMS.Service.Services
                     Phone = employee.Phone,
                     Position = employee.Position,
                     JoiningDate = employee.JoiningDate.ToLocalTime(),
-                    //JoiningDate = employee.JoiningDate.ToString("yyyy-MM-dd"),
                     DepartmentId = employee.DepartmentId,
                     IsActive = employee.IsActive
                 };
@@ -175,6 +174,16 @@ namespace EMS.Service.Services
             }
         }
 
+        public async Task<Employee> DeleteEmployeeAsync(int id)
+        {
+            var employee = await _dbContext.Employees.FindAsync(id) ?? throw new ArgumentNullException(nameof(id), "Employee not found");
+
+            _dbContext.Employees.Remove(employee);
+            await _dbContext.SaveChangesAsync();
+
+            return employee;
+        }
+
         private static void ValidateEmployeeDto(EmployeeCreationDto employeeDto)
         {
             if (string.IsNullOrWhiteSpace(employeeDto.Name))
@@ -194,7 +203,5 @@ namespace EMS.Service.Services
 
         [System.Text.RegularExpressions.GeneratedRegex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$")]
         private static partial System.Text.RegularExpressions.Regex MyRegex();
-
-        
     }
 }

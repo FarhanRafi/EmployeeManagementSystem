@@ -11,6 +11,7 @@ namespace EMS.Service.Interfaces
         Task<PaginatedResult<EmployeeDto>> GetEmployeeAsync(int page, int pageSize, string? name, string? position, int departmentId, int minScore, int maxScore);
         Task<EmployeeCreationDto> GetEmployeeByIdAsync(int id);
         Task<Employee> UpdateEmployeeAsync(int id, EmployeeCreationDto employeeDto);
+        Task<Employee> DeleteEmployeeAsync(int id);
         
     }
 }

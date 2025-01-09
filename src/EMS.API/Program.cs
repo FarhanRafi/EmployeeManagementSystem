@@ -182,12 +182,28 @@ app.MapPut("/api/employees/{id:int}", async (IEmployeeService employeeService, i
     try
     {
         var updatedEmployee = await employeeService.UpdateEmployeeAsync(id, employeeDto);
-        return Results.Ok (updatedEmployee);
+        return Results.Ok(new
+        {
+            Message = $"Employee with ID {id} and Name '{updatedEmployee.Name}' has been updated.",
+            DeletedEmployeeId = id,
+            DeletedEmployeeName = updatedEmployee.Name
+        });
     }
     catch (Exception ex)
     {
         return Results.Problem(ex.Message);
     }
+});
+
+app.MapDelete("api/employees/{id:int}", async (IEmployeeService employeeService, int id) =>
+{
+    var employee = await employeeService.DeleteEmployeeAsync(id);
+    return Results.Ok(new
+    {
+        Message = $"Employee with ID {id} and Name '{employee.Name}' has been deleted.",
+        DeletedEmployeeId = id,
+        DeletedEmployeeName = employee.Name
+    });
 });
 
 #endregion

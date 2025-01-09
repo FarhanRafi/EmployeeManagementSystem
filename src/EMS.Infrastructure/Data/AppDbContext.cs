@@ -58,14 +58,7 @@ namespace EMS.Infrastructure.Data
 
             foreach (var entry in entries)
             {
-                if (entry.Entity is AuditableEntityWithSoftDeletation softDelete && entry.State == EntityState.Deleted)
-                {
-                    softDelete.IsDeleted = true;
-                    softDelete.DeletedAt = DateTime.UtcNow;
-                    entry.State = EntityState.Modified;
-                }
-
-                if (entry.Entity is AuditableEntity auditableEntity)
+                if (entry.Entity is AuditableEntity auditableEntity && entry.State != EntityState.Deleted)
                 {
                     if (entry.State == EntityState.Added)
                     {
@@ -75,6 +68,13 @@ namespace EMS.Infrastructure.Data
                     {
                         auditableEntity.UpdatedAt = DateTime.UtcNow;
                     }
+                }
+
+                if (entry.Entity is AuditableEntityWithSoftDeletation softDelete && entry.State == EntityState.Deleted)
+                {
+                    softDelete.IsDeleted = true;
+                    softDelete.DeletedAt = DateTime.UtcNow;
+                    entry.State = EntityState.Modified;
                 }
             }
 
@@ -84,18 +84,11 @@ namespace EMS.Infrastructure.Data
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             var entries = ChangeTracker.Entries()
-                .Where(e => e.Entity is AuditableEntity && (e.State == EntityState.Added || e.State == EntityState.Modified));
+                .Where(e => (e.Entity is AuditableEntity && (e.State == EntityState.Added || e.State == EntityState.Modified)) || e.Entity is AuditableEntityWithSoftDeletation);
 
             foreach (var entry in entries)
             {
-                if (entry.Entity is AuditableEntityWithSoftDeletation softDelete && entry.State == EntityState.Deleted)
-                {
-                    softDelete.IsDeleted = true;
-                    softDelete.DeletedAt = DateTime.UtcNow;
-                    entry.State = EntityState.Modified;
-                }
-
-                if (entry.Entity is AuditableEntity auditableEntity)
+                if (entry.Entity is AuditableEntity auditableEntity && entry.State != EntityState.Deleted)
                 {
                     if (entry.State == EntityState.Added)
                     {
@@ -105,6 +98,13 @@ namespace EMS.Infrastructure.Data
                     {
                         auditableEntity.UpdatedAt = DateTime.UtcNow;
                     }
+                }
+
+                if (entry.Entity is AuditableEntityWithSoftDeletation softDelete && entry.State == EntityState.Deleted)
+                {
+                    softDelete.IsDeleted = true;
+                    softDelete.DeletedAt = DateTime.UtcNow;
+                    entry.State = EntityState.Modified;
                 }
             }
 

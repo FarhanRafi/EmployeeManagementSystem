@@ -62,10 +62,10 @@ $(function () {
       },
       {
         data: "id",
-        render: function (data) {
+        render: function (id) {
           return `
-            <button class="btn btn-sm btn-warning" onclick="editEmployee(${data})">Edit</button>
-            <button class="btn btn-sm btn-danger" onclick="deleteEmployee(${data})">Delete</button>`;
+            <button class="btn btn-sm btn-warning" onclick="editEmployee(${id})">Edit</button>
+            <button class="btn btn-sm btn-danger" onclick="deleteEmployee(${id})">Delete</button>`;
         },
       },
     ],
@@ -108,20 +108,20 @@ var isEditMode = false; // Flag to determine if we are in edit mode
 
 // Function to open the modal in Add mode (clear form, change button text)
 function openAddEmployeeModal() {
-  isEditMode = false; // Set to Add mode
+  isEditMode = false;
   loadDepartments("departmentId");
-  $("#employeeForm")[0].reset(); // Reset the form
+  $("#employeeForm")[0].reset();
 
   $("#employeeModalLabel").text("Add Employee");
   $("#submitButton").text("Create");
 
-  $("#employeeId").val(""); // Clear the hidden employee ID
+  $("#employeeId").val("");
   $("#employeeModal").modal("show");
 }
 
 // Function to open the modal in Edit mode (populate form, change button text)
 function editEmployee(id) {
-  isEditMode = true; // Set to Edit mode
+  isEditMode = true;
 
   $.ajax({
     url: baseUrl + "/api/employees/" + id,
@@ -202,5 +202,42 @@ function handleEmployeeFormSubmit() {
       },
     });
   }
-  dataTable.ajax.reload();
+
+  reloadEmployees();
+}
+
+var deleteEmployeeId = null;
+
+function deleteEmployee(id) {
+  deleteEmployeeId = id;
+  $("#deleteEmployeeModal").modal("show");
+}
+
+function confirmDeleteEmployee() {
+  if (!deleteEmployeeId) return;
+
+  $.ajax({
+    url: baseUrl + "/api/employees/" + deleteEmployeeId,
+    method: "DELETE",
+    success: function (res) {
+      alert("Employee deleted successfully!");
+      $("#deleteEmployeeModal").modal("hide");
+      deleteEmployeeId = null;
+      alert("Employee deleted successfully!" + res.Message);
+      reloadEmployees();
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      const errorMessage = xhr.responseJSON?.Message || "An error occurred.";
+      alert("Error: " + errorMessage);
+    },
+  });
+}
+
+// Attach the confirm delete handler to the modal button
+$("#confirmDeleteButton").on("click", confirmDeleteEmployee);
+
+function reloadEmployees() {
+  $("#employee-table").DataTable().ajax.reload();
+
+  location.reload(); // fallback for reload
 }
